@@ -37,6 +37,9 @@ DerivedData/
 # Local scripts (contain DEVELOPMENT_TEAM)
 run-debug.sh
 
+# Release artifacts
+release/
+
 # Development tools
 .taskmaster/
 .claude/
