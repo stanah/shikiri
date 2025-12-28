@@ -1,0 +1,40 @@
+name: Shikiri
+options:
+  developmentLanguage: ja
+  xcodeVersion: "15.0"
+settings:
+  base:
+    MACOSX_DEPLOYMENT_TARGET: 14.0
+    SWIFT_VERSION: 6.0
+    PRODUCT_BUNDLE_IDENTIFIER: com.stanah.Shikiri
+    MARKETING_VERSION: 0.1.0
+    CURRENT_PROJECT_VERSION: 1
+    SWIFT_STRICT_CONCURRENCY: complete
+    GENERATE_INFOPLIST_FILE: NO
+
+targets:
+  Shikiri:
+    type: application
+    platform: macOS
+    sources:
+      - path: Shikiri
+    settings:
+      base:
+        INFOPLIST_FILE: Shikiri/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Shikiri/Shikiri.entitlements
+        PRODUCT_BUNDLE_IDENTIFIER: com.stanah.Shikiri
+        SWIFT_EMIT_LOC_STRINGS: YES
+    scheme:
+      testTargets:
+        - ShikiriTests
+
+  ShikiriTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: ShikiriTests
+    dependencies:
+      - target: Shikiri
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES

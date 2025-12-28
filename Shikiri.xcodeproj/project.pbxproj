@@ -1,0 +1,685 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00BD7EDD72B12F0686347FB9 /* ModifierPresetBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43106E9EF93AD809C5AC951 /* ModifierPresetBindingTests.swift */; };
+		03960C46889BCC30ED69DFDA /* BoundaryDragCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4CD8FE10F099CBC13F05A13 /* BoundaryDragCoordinator.swift */; };
+		11551D85C2F212F5709C23B8 /* SnappedWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E743491CD0A0156325D9D3 /* SnappedWindowTests.swift */; };
+		11552D44BA46DCF7EF2F0991 /* ZoneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088C96244BE705B87F4EA860 /* ZoneManager.swift */; };
+		1D034AD5941D4CCAB11F266F /* AccessibilityPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC823FBD44D92748B9D790C /* AccessibilityPermissionView.swift */; };
+		1D156258F1875759D4B318F3 /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F385DBCA76EBEFD0C9D5B767 /* EventMonitor.swift */; };
+		25129DBB339EF686391BBC1E /* ScreenLayoutConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF1978242752B2C0E2534F1 /* ScreenLayoutConfigTests.swift */; };
+		25D44F7F9C7C013203BB942A /* ModifierPresetBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96A00D05E1DB600AD9DD509 /* ModifierPresetBinding.swift */; };
+		2B9FAAC17687E72AF7CB0C1C /* ZoneBoundaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A43192456F301FED6CA96AE /* ZoneBoundaryTests.swift */; };
+		2C71D111F5F6369200EF37AD /* PresetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990BEBF68E87CE217D3B1615 /* PresetManager.swift */; };
+		2D35A07639BD17D6E2DCCEEA /* EventMonitorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5604210E9072D924DC434AD /* EventMonitorDelegate.swift */; };
+		3051AA2E7AC63A9ECDCF7695 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B490D0AFA678833A52FEA30 /* ContentView.swift */; };
+		383395FE9FB2B7E2AA8A4DAE /* ScreenMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56D9194CA336C87204DE751 /* ScreenMonitor.swift */; };
+		3C5C638204B8538BBAEAC0E2 /* LaunchAtLoginManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0FC62DDD21816B97E5F9B5 /* LaunchAtLoginManagerTests.swift */; };
+		3E5636BAA1AD5D97DFB73221 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A6BCE0B46A676361538BA1 /* SettingsView.swift */; };
+		40443DD9340F09350A907DD1 /* WindowControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B05E916C558ACE17DD94050 /* WindowControllerTests.swift */; };
+		5117D24283192208D1F52A91 /* ZoneOverlayViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758DD2991FD6BA247B6DAD4E /* ZoneOverlayViewTests.swift */; };
+		54AE58602D3BDE3B0855AEFA /* ZoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACAA96A6E7D9850A7E85628 /* ZoneTests.swift */; };
+		5830AB4C310A6028672DBBE3 /* LayoutEditorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE339AAFE49F901FA46F744 /* LayoutEditorWindowController.swift */; };
+		590E625FE84098BE901FD37D /* Zone.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1E6F414F42035F484EF8BA /* Zone.swift */; };
+		5930A93A80D0F1A8EA5B2D45 /* SnapCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D672C5609DD1026F07775477 /* SnapCoordinatorTests.swift */; };
+		61F770198A021AC7944BF954 /* AccessibilityPermissionViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F88FFA87D351B06D4D3AFE /* AccessibilityPermissionViewTests.swift */; };
+		6B581AFC2AA0B4E82FA587B6 /* OverlayWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C821AAD2E718753E610BCE /* OverlayWindow.swift */; };
+		6D417961CD1CF5F7D2755CD2 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9751EF94B17D8D8A53FAB44 /* WindowController.swift */; };
+		6EB4E2684D0477C0EBD5706D /* EditorControlPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C69C1C252C156ABE2251BEB /* EditorControlPanel.swift */; };
+		74D84EC1A1B1BCF8E97DAF76 /* ScreenIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1ED8ED7E09793C9FA17BD2 /* ScreenIdentifier.swift */; };
+		7A736D692E32FB69884EDAAD /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8036EDFE258A7B1C0788C2C2 /* ContentViewTests.swift */; };
+		7DBBF9E6F2D2AD7A0227A394 /* SnappedWindowManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8AD5DB81B21FFB94F97954 /* SnappedWindowManagerTests.swift */; };
+		82A90872DD666648BD53279D /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC5169CACE022598996A704 /* Settings.swift */; };
+		83226AF6B208D9051CB1084F /* SnappedWindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F493864EE63CB64A003BEA9 /* SnappedWindowManager.swift */; };
+		84794900F50DA8FDB013385E /* EventMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0AF3EF5C8F039542FDA7D7 /* EventMonitorTests.swift */; };
+		8A21EF5B8D96B3F9078C4626 /* DragState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677DF89455CA0804A2E9D434 /* DragState.swift */; };
+		8C28573259CCFF029C148BCA /* ZoneManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F8E4C73F5275CC1CDD565A /* ZoneManagerTests.swift */; };
+		8D2DFF224D7F2F65BEDA7307 /* SnappedWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718B30E6C92FC9014120A062 /* SnappedWindow.swift */; };
+		9BF99D77661D150A96C11D6E /* ScreenLayoutConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFF03E2AEF6EC11AA2220E9 /* ScreenLayoutConfig.swift */; };
+		9DB854A3F2A2A891BAEF2B38 /* ScreenLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A317271C5C1DC5F19874F0 /* ScreenLayoutManager.swift */; };
+		9E12AC36A49BF29A0CB9306B /* OverlayControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74FF4336DE9433C33032A3E /* OverlayControllerTests.swift */; };
+		9FD3BC7B72529ABA0B190B38 /* OverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3F11A8C04B0D84BF275591 /* OverlayController.swift */; };
+		A131E13694E4C32C3E5CA47D /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55AA2A44420CB3A2687D57D /* SettingsTests.swift */; };
+		A42058DF7AEAEFB62041E863 /* BoundaryDragCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E831DED9E79C3A0E375029B5 /* BoundaryDragCoordinatorTests.swift */; };
+		A920B38E17F5815AAAD5D193 /* ShikiriApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6CC1C816226A6BB7F94607 /* ShikiriApp.swift */; };
+		A9E0D10E4C83F47C6B8D2B75 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1688751EF47C8FBF976952 /* LaunchAtLoginManager.swift */; };
+		AE2A8EC8252E5A716D56EF40 /* PresetManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFA38D851A76BAE9BE4A0FC /* PresetManagerTests.swift */; };
+		B6110C727C3291E4903A2A12 /* ZoneLayoutPresetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192F75EB76371C2DACE25C19 /* ZoneLayoutPresetTests.swift */; };
+		B8D0C99D8CD602CD81CA8C90 /* ZoneLayoutPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB88DFC0E543DF11DE7577D /* ZoneLayoutPreset.swift */; };
+		C601B1BB1C83372475221335 /* ScreenPreviewCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958D60ACBEC9BAF25778D9D3 /* ScreenPreviewCanvas.swift */; };
+		CD690250CF2D94FB91FC3BA5 /* SnapCoordinatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EB1393EBDA1E08668A6F7B /* SnapCoordinatorManager.swift */; };
+		CFCA664CC5C6E0C2DC6AEFA5 /* AccessibilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C23635346EE9CCFED43763 /* AccessibilityManager.swift */; };
+		D09176163BADDE68BCA860F0 /* LayoutEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39CB58DD4BE1E2363A7DC266 /* LayoutEditorView.swift */; };
+		D17BA5A62A6D9D862B7FB464 /* AccessibilityManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD5022268881DCF4AFD97E /* AccessibilityManagerTests.swift */; };
+		D191A254C197D42C0C717515 /* AXWrapperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800F70581DF2B2F827C06544 /* AXWrapperProtocol.swift */; };
+		D281BB00EBA3059845D2A69E /* WindowOperationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68CC1A7AF3723C16C2BC545 /* WindowOperationError.swift */; };
+		D381C72A8C69AE794A53323E /* ZoneBoundary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9032066E78AE0069AC274650 /* ZoneBoundary.swift */; };
+		DAE01C9F4CA605B97AAFAB76 /* ZoneRectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 977538184179B1A11CDCD69B /* ZoneRectView.swift */; };
+		DE02628CCB3BF2165A4C585F /* ScreenIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A798123D05D68C58EDE69B0 /* ScreenIdentifierTests.swift */; };
+		E486A138D7730D6AED64CFF1 /* ZoneOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404CC3F7E476E7F21461983D /* ZoneOverlayView.swift */; };
+		E71544EF45570B58AC2692D6 /* OverlayWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B455F73159F0D4C9C59558 /* OverlayWindowTests.swift */; };
+		EBFFF7B4B3F9EA3F099F1772 /* ScreenLayoutManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D00D31C3E6CD9D5203B09D /* ScreenLayoutManagerTests.swift */; };
+		EFAEE7AFD51FC1AAE0344B2B /* SnapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B968CACF789EE1A1568F9E /* SnapCoordinator.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		55512242F42B3D7ABC0B97A8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2704E7441D68C53503095397 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 45319305CB262EC8A07B169E;
+			remoteInfo = Shikiri;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		088C96244BE705B87F4EA860 /* ZoneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneManager.swift; sourceTree = "<group>"; };
+		0A798123D05D68C58EDE69B0 /* ScreenIdentifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenIdentifierTests.swift; sourceTree = "<group>"; };
+		0F493864EE63CB64A003BEA9 /* SnappedWindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnappedWindowManager.swift; sourceTree = "<group>"; };
+		15E5881CF92898C9CD01738F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		192F75EB76371C2DACE25C19 /* ZoneLayoutPresetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneLayoutPresetTests.swift; sourceTree = "<group>"; };
+		19C821AAD2E718753E610BCE /* OverlayWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindow.swift; sourceTree = "<group>"; };
+		1A43192456F301FED6CA96AE /* ZoneBoundaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneBoundaryTests.swift; sourceTree = "<group>"; };
+		1B05E916C558ACE17DD94050 /* WindowControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowControllerTests.swift; sourceTree = "<group>"; };
+		1DFF03E2AEF6EC11AA2220E9 /* ScreenLayoutConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLayoutConfig.swift; sourceTree = "<group>"; };
+		1EFA38D851A76BAE9BE4A0FC /* PresetManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetManagerTests.swift; sourceTree = "<group>"; };
+		33EB1393EBDA1E08668A6F7B /* SnapCoordinatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapCoordinatorManager.swift; sourceTree = "<group>"; };
+		39CB58DD4BE1E2363A7DC266 /* LayoutEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutEditorView.swift; sourceTree = "<group>"; };
+		404CC3F7E476E7F21461983D /* ZoneOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneOverlayView.swift; sourceTree = "<group>"; };
+		43F88FFA87D351B06D4D3AFE /* AccessibilityPermissionViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityPermissionViewTests.swift; sourceTree = "<group>"; };
+		4F8AD5DB81B21FFB94F97954 /* SnappedWindowManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnappedWindowManagerTests.swift; sourceTree = "<group>"; };
+		54B455F73159F0D4C9C59558 /* OverlayWindowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindowTests.swift; sourceTree = "<group>"; };
+		55A317271C5C1DC5F19874F0 /* ScreenLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLayoutManager.swift; sourceTree = "<group>"; };
+		5C69C1C252C156ABE2251BEB /* EditorControlPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorControlPanel.swift; sourceTree = "<group>"; };
+		63C23635346EE9CCFED43763 /* AccessibilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityManager.swift; sourceTree = "<group>"; };
+		677DF89455CA0804A2E9D434 /* DragState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragState.swift; sourceTree = "<group>"; };
+		6E0AF3EF5C8F039542FDA7D7 /* EventMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitorTests.swift; sourceTree = "<group>"; };
+		718B30E6C92FC9014120A062 /* SnappedWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnappedWindow.swift; sourceTree = "<group>"; };
+		758DD2991FD6BA247B6DAD4E /* ZoneOverlayViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneOverlayViewTests.swift; sourceTree = "<group>"; };
+		7B490D0AFA678833A52FEA30 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		800F70581DF2B2F827C06544 /* AXWrapperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXWrapperProtocol.swift; sourceTree = "<group>"; };
+		8036EDFE258A7B1C0788C2C2 /* ContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
+		89A6BCE0B46A676361538BA1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		8DCD5022268881DCF4AFD97E /* AccessibilityManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityManagerTests.swift; sourceTree = "<group>"; };
+		9032066E78AE0069AC274650 /* ZoneBoundary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneBoundary.swift; sourceTree = "<group>"; };
+		958D60ACBEC9BAF25778D9D3 /* ScreenPreviewCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenPreviewCanvas.swift; sourceTree = "<group>"; };
+		96B968CACF789EE1A1568F9E /* SnapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapCoordinator.swift; sourceTree = "<group>"; };
+		977538184179B1A11CDCD69B /* ZoneRectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneRectView.swift; sourceTree = "<group>"; };
+		990BEBF68E87CE217D3B1615 /* PresetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetManager.swift; sourceTree = "<group>"; };
+		9D6CC1C816226A6BB7F94607 /* ShikiriApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShikiriApp.swift; sourceTree = "<group>"; };
+		AACAA96A6E7D9850A7E85628 /* ZoneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneTests.swift; sourceTree = "<group>"; };
+		AB0FC62DDD21816B97E5F9B5 /* LaunchAtLoginManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManagerTests.swift; sourceTree = "<group>"; };
+		AB1688751EF47C8FBF976952 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
+		AEF1978242752B2C0E2534F1 /* ScreenLayoutConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLayoutConfigTests.swift; sourceTree = "<group>"; };
+		AFB88DFC0E543DF11DE7577D /* ZoneLayoutPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneLayoutPreset.swift; sourceTree = "<group>"; };
+		BB3F11A8C04B0D84BF275591 /* OverlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayController.swift; sourceTree = "<group>"; };
+		C2E743491CD0A0156325D9D3 /* SnappedWindowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnappedWindowTests.swift; sourceTree = "<group>"; };
+		C4CD8FE10F099CBC13F05A13 /* BoundaryDragCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundaryDragCoordinator.swift; sourceTree = "<group>"; };
+		C9751EF94B17D8D8A53FAB44 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
+		D5604210E9072D924DC434AD /* EventMonitorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitorDelegate.swift; sourceTree = "<group>"; };
+		D56D9194CA336C87204DE751 /* ScreenMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenMonitor.swift; sourceTree = "<group>"; };
+		D672C5609DD1026F07775477 /* SnapCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapCoordinatorTests.swift; sourceTree = "<group>"; };
+		DAE339AAFE49F901FA46F744 /* LayoutEditorWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutEditorWindowController.swift; sourceTree = "<group>"; };
+		DD1E6F414F42035F484EF8BA /* Zone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zone.swift; sourceTree = "<group>"; };
+		DEC5169CACE022598996A704 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		E03C683865BBBC5B917546DD /* ShikiriTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShikiriTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E43106E9EF93AD809C5AC951 /* ModifierPresetBindingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifierPresetBindingTests.swift; sourceTree = "<group>"; };
+		E55AA2A44420CB3A2687D57D /* SettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
+		E74FF4336DE9433C33032A3E /* OverlayControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayControllerTests.swift; sourceTree = "<group>"; };
+		E831DED9E79C3A0E375029B5 /* BoundaryDragCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundaryDragCoordinatorTests.swift; sourceTree = "<group>"; };
+		E96A00D05E1DB600AD9DD509 /* ModifierPresetBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifierPresetBinding.swift; sourceTree = "<group>"; };
+		EAC823FBD44D92748B9D790C /* AccessibilityPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityPermissionView.swift; sourceTree = "<group>"; };
+		F2907B03E0B59A48B51B3144 /* Shikiri.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shikiri.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F385DBCA76EBEFD0C9D5B767 /* EventMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
+		F568CA4DBC8D4D84575F1527 /* Shikiri.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shikiri.entitlements; sourceTree = "<group>"; };
+		F68CC1A7AF3723C16C2BC545 /* WindowOperationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowOperationError.swift; sourceTree = "<group>"; };
+		F7D00D31C3E6CD9D5203B09D /* ScreenLayoutManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLayoutManagerTests.swift; sourceTree = "<group>"; };
+		F9F8E4C73F5275CC1CDD565A /* ZoneManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneManagerTests.swift; sourceTree = "<group>"; };
+		FD1ED8ED7E09793C9FA17BD2 /* ScreenIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenIdentifier.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2CAC2C73DCD9D5F8BD6D96CE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F2907B03E0B59A48B51B3144 /* Shikiri.app */,
+				E03C683865BBBC5B917546DD /* ShikiriTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3062D53AF66961B4E55D258B /* Shikiri */ = {
+			isa = PBXGroup;
+			children = (
+				7B490D0AFA678833A52FEA30 /* ContentView.swift */,
+				15E5881CF92898C9CD01738F /* Info.plist */,
+				F568CA4DBC8D4D84575F1527 /* Shikiri.entitlements */,
+				9D6CC1C816226A6BB7F94607 /* ShikiriApp.swift */,
+				C94CBA11350A374D7AC9A459 /* Accessibility */,
+				598D39C63F807A6518B76A87 /* Coordinator */,
+				9EC8910E218683331F5B83CE /* EventMonitor */,
+				C904168238FA210BC5C7FF61 /* Overlay */,
+				83FDEBFCD9F3B628B10D85E9 /* Settings */,
+				AB24011818F37F0DE4C8524A /* WindowController */,
+				B42831FF79F9DEF183350C28 /* Zone */,
+			);
+			path = Shikiri;
+			sourceTree = "<group>";
+		};
+		598D39C63F807A6518B76A87 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				C4CD8FE10F099CBC13F05A13 /* BoundaryDragCoordinator.swift */,
+				D56D9194CA336C87204DE751 /* ScreenMonitor.swift */,
+				96B968CACF789EE1A1568F9E /* SnapCoordinator.swift */,
+				33EB1393EBDA1E08668A6F7B /* SnapCoordinatorManager.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		83FDEBFCD9F3B628B10D85E9 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AB1688751EF47C8FBF976952 /* LaunchAtLoginManager.swift */,
+				E96A00D05E1DB600AD9DD509 /* ModifierPresetBinding.swift */,
+				FD1ED8ED7E09793C9FA17BD2 /* ScreenIdentifier.swift */,
+				1DFF03E2AEF6EC11AA2220E9 /* ScreenLayoutConfig.swift */,
+				55A317271C5C1DC5F19874F0 /* ScreenLayoutManager.swift */,
+				DEC5169CACE022598996A704 /* Settings.swift */,
+				89A6BCE0B46A676361538BA1 /* SettingsView.swift */,
+				BF028A862CF446FC2986D559 /* LayoutEditor */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		9EC8910E218683331F5B83CE /* EventMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				677DF89455CA0804A2E9D434 /* DragState.swift */,
+				F385DBCA76EBEFD0C9D5B767 /* EventMonitor.swift */,
+				D5604210E9072D924DC434AD /* EventMonitorDelegate.swift */,
+			);
+			path = EventMonitor;
+			sourceTree = "<group>";
+		};
+		AB24011818F37F0DE4C8524A /* WindowController */ = {
+			isa = PBXGroup;
+			children = (
+				718B30E6C92FC9014120A062 /* SnappedWindow.swift */,
+				0F493864EE63CB64A003BEA9 /* SnappedWindowManager.swift */,
+				C9751EF94B17D8D8A53FAB44 /* WindowController.swift */,
+				F68CC1A7AF3723C16C2BC545 /* WindowOperationError.swift */,
+			);
+			path = WindowController;
+			sourceTree = "<group>";
+		};
+		B42831FF79F9DEF183350C28 /* Zone */ = {
+			isa = PBXGroup;
+			children = (
+				990BEBF68E87CE217D3B1615 /* PresetManager.swift */,
+				DD1E6F414F42035F484EF8BA /* Zone.swift */,
+				9032066E78AE0069AC274650 /* ZoneBoundary.swift */,
+				AFB88DFC0E543DF11DE7577D /* ZoneLayoutPreset.swift */,
+				088C96244BE705B87F4EA860 /* ZoneManager.swift */,
+			);
+			path = Zone;
+			sourceTree = "<group>";
+		};
+		BD869CE38B53C328A4766E18 = {
+			isa = PBXGroup;
+			children = (
+				3062D53AF66961B4E55D258B /* Shikiri */,
+				EBA92D5E74B82C3ED8CEE8D5 /* ShikiriTests */,
+				2CAC2C73DCD9D5F8BD6D96CE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BF028A862CF446FC2986D559 /* LayoutEditor */ = {
+			isa = PBXGroup;
+			children = (
+				5C69C1C252C156ABE2251BEB /* EditorControlPanel.swift */,
+				39CB58DD4BE1E2363A7DC266 /* LayoutEditorView.swift */,
+				DAE339AAFE49F901FA46F744 /* LayoutEditorWindowController.swift */,
+				958D60ACBEC9BAF25778D9D3 /* ScreenPreviewCanvas.swift */,
+				977538184179B1A11CDCD69B /* ZoneRectView.swift */,
+			);
+			path = LayoutEditor;
+			sourceTree = "<group>";
+		};
+		C904168238FA210BC5C7FF61 /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				BB3F11A8C04B0D84BF275591 /* OverlayController.swift */,
+				19C821AAD2E718753E610BCE /* OverlayWindow.swift */,
+				404CC3F7E476E7F21461983D /* ZoneOverlayView.swift */,
+			);
+			path = Overlay;
+			sourceTree = "<group>";
+		};
+		C94CBA11350A374D7AC9A459 /* Accessibility */ = {
+			isa = PBXGroup;
+			children = (
+				63C23635346EE9CCFED43763 /* AccessibilityManager.swift */,
+				EAC823FBD44D92748B9D790C /* AccessibilityPermissionView.swift */,
+				800F70581DF2B2F827C06544 /* AXWrapperProtocol.swift */,
+			);
+			path = Accessibility;
+			sourceTree = "<group>";
+		};
+		EBA92D5E74B82C3ED8CEE8D5 /* ShikiriTests */ = {
+			isa = PBXGroup;
+			children = (
+				8DCD5022268881DCF4AFD97E /* AccessibilityManagerTests.swift */,
+				43F88FFA87D351B06D4D3AFE /* AccessibilityPermissionViewTests.swift */,
+				E831DED9E79C3A0E375029B5 /* BoundaryDragCoordinatorTests.swift */,
+				8036EDFE258A7B1C0788C2C2 /* ContentViewTests.swift */,
+				6E0AF3EF5C8F039542FDA7D7 /* EventMonitorTests.swift */,
+				AB0FC62DDD21816B97E5F9B5 /* LaunchAtLoginManagerTests.swift */,
+				E43106E9EF93AD809C5AC951 /* ModifierPresetBindingTests.swift */,
+				E74FF4336DE9433C33032A3E /* OverlayControllerTests.swift */,
+				54B455F73159F0D4C9C59558 /* OverlayWindowTests.swift */,
+				1EFA38D851A76BAE9BE4A0FC /* PresetManagerTests.swift */,
+				0A798123D05D68C58EDE69B0 /* ScreenIdentifierTests.swift */,
+				AEF1978242752B2C0E2534F1 /* ScreenLayoutConfigTests.swift */,
+				F7D00D31C3E6CD9D5203B09D /* ScreenLayoutManagerTests.swift */,
+				E55AA2A44420CB3A2687D57D /* SettingsTests.swift */,
+				D672C5609DD1026F07775477 /* SnapCoordinatorTests.swift */,
+				4F8AD5DB81B21FFB94F97954 /* SnappedWindowManagerTests.swift */,
+				C2E743491CD0A0156325D9D3 /* SnappedWindowTests.swift */,
+				1B05E916C558ACE17DD94050 /* WindowControllerTests.swift */,
+				1A43192456F301FED6CA96AE /* ZoneBoundaryTests.swift */,
+				192F75EB76371C2DACE25C19 /* ZoneLayoutPresetTests.swift */,
+				F9F8E4C73F5275CC1CDD565A /* ZoneManagerTests.swift */,
+				758DD2991FD6BA247B6DAD4E /* ZoneOverlayViewTests.swift */,
+				AACAA96A6E7D9850A7E85628 /* ZoneTests.swift */,
+			);
+			path = ShikiriTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		45319305CB262EC8A07B169E /* Shikiri */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E1E23FE9835E05B4A335C0CE /* Build configuration list for PBXNativeTarget "Shikiri" */;
+			buildPhases = (
+				DAD446A269D43E7C4342B48B /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Shikiri;
+			packageProductDependencies = (
+			);
+			productName = Shikiri;
+			productReference = F2907B03E0B59A48B51B3144 /* Shikiri.app */;
+			productType = "com.apple.product-type.application";
+		};
+		9A105FF3C4B84FF293231107 /* ShikiriTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 041C6C49AD9DBA8C464F9975 /* Build configuration list for PBXNativeTarget "ShikiriTests" */;
+			buildPhases = (
+				AB21310AD27AA819CC350E05 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B5D3E59AFC804F6ECBBE75F3 /* PBXTargetDependency */,
+			);
+			name = ShikiriTests;
+			packageProductDependencies = (
+			);
+			productName = ShikiriTests;
+			productReference = E03C683865BBBC5B917546DD /* ShikiriTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2704E7441D68C53503095397 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = 0F74C6C48F83D9304592689A /* Build configuration list for PBXProject "Shikiri" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = ja;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				ja,
+			);
+			mainGroup = BD869CE38B53C328A4766E18;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				45319305CB262EC8A07B169E /* Shikiri */,
+				9A105FF3C4B84FF293231107 /* ShikiriTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AB21310AD27AA819CC350E05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D17BA5A62A6D9D862B7FB464 /* AccessibilityManagerTests.swift in Sources */,
+				61F770198A021AC7944BF954 /* AccessibilityPermissionViewTests.swift in Sources */,
+				A42058DF7AEAEFB62041E863 /* BoundaryDragCoordinatorTests.swift in Sources */,
+				7A736D692E32FB69884EDAAD /* ContentViewTests.swift in Sources */,
+				84794900F50DA8FDB013385E /* EventMonitorTests.swift in Sources */,
+				3C5C638204B8538BBAEAC0E2 /* LaunchAtLoginManagerTests.swift in Sources */,
+				00BD7EDD72B12F0686347FB9 /* ModifierPresetBindingTests.swift in Sources */,
+				9E12AC36A49BF29A0CB9306B /* OverlayControllerTests.swift in Sources */,
+				E71544EF45570B58AC2692D6 /* OverlayWindowTests.swift in Sources */,
+				AE2A8EC8252E5A716D56EF40 /* PresetManagerTests.swift in Sources */,
+				DE02628CCB3BF2165A4C585F /* ScreenIdentifierTests.swift in Sources */,
+				25129DBB339EF686391BBC1E /* ScreenLayoutConfigTests.swift in Sources */,
+				EBFFF7B4B3F9EA3F099F1772 /* ScreenLayoutManagerTests.swift in Sources */,
+				A131E13694E4C32C3E5CA47D /* SettingsTests.swift in Sources */,
+				5930A93A80D0F1A8EA5B2D45 /* SnapCoordinatorTests.swift in Sources */,
+				7DBBF9E6F2D2AD7A0227A394 /* SnappedWindowManagerTests.swift in Sources */,
+				11551D85C2F212F5709C23B8 /* SnappedWindowTests.swift in Sources */,
+				40443DD9340F09350A907DD1 /* WindowControllerTests.swift in Sources */,
+				2B9FAAC17687E72AF7CB0C1C /* ZoneBoundaryTests.swift in Sources */,
+				B6110C727C3291E4903A2A12 /* ZoneLayoutPresetTests.swift in Sources */,
+				8C28573259CCFF029C148BCA /* ZoneManagerTests.swift in Sources */,
+				5117D24283192208D1F52A91 /* ZoneOverlayViewTests.swift in Sources */,
+				54AE58602D3BDE3B0855AEFA /* ZoneTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAD446A269D43E7C4342B48B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D191A254C197D42C0C717515 /* AXWrapperProtocol.swift in Sources */,
+				CFCA664CC5C6E0C2DC6AEFA5 /* AccessibilityManager.swift in Sources */,
+				1D034AD5941D4CCAB11F266F /* AccessibilityPermissionView.swift in Sources */,
+				03960C46889BCC30ED69DFDA /* BoundaryDragCoordinator.swift in Sources */,
+				3051AA2E7AC63A9ECDCF7695 /* ContentView.swift in Sources */,
+				8A21EF5B8D96B3F9078C4626 /* DragState.swift in Sources */,
+				6EB4E2684D0477C0EBD5706D /* EditorControlPanel.swift in Sources */,
+				1D156258F1875759D4B318F3 /* EventMonitor.swift in Sources */,
+				2D35A07639BD17D6E2DCCEEA /* EventMonitorDelegate.swift in Sources */,
+				A9E0D10E4C83F47C6B8D2B75 /* LaunchAtLoginManager.swift in Sources */,
+				D09176163BADDE68BCA860F0 /* LayoutEditorView.swift in Sources */,
+				5830AB4C310A6028672DBBE3 /* LayoutEditorWindowController.swift in Sources */,
+				25D44F7F9C7C013203BB942A /* ModifierPresetBinding.swift in Sources */,
+				9FD3BC7B72529ABA0B190B38 /* OverlayController.swift in Sources */,
+				6B581AFC2AA0B4E82FA587B6 /* OverlayWindow.swift in Sources */,
+				2C71D111F5F6369200EF37AD /* PresetManager.swift in Sources */,
+				74D84EC1A1B1BCF8E97DAF76 /* ScreenIdentifier.swift in Sources */,
+				9BF99D77661D150A96C11D6E /* ScreenLayoutConfig.swift in Sources */,
+				9DB854A3F2A2A891BAEF2B38 /* ScreenLayoutManager.swift in Sources */,
+				383395FE9FB2B7E2AA8A4DAE /* ScreenMonitor.swift in Sources */,
+				C601B1BB1C83372475221335 /* ScreenPreviewCanvas.swift in Sources */,
+				82A90872DD666648BD53279D /* Settings.swift in Sources */,
+				3E5636BAA1AD5D97DFB73221 /* SettingsView.swift in Sources */,
+				A920B38E17F5815AAAD5D193 /* ShikiriApp.swift in Sources */,
+				EFAEE7AFD51FC1AAE0344B2B /* SnapCoordinator.swift in Sources */,
+				CD690250CF2D94FB91FC3BA5 /* SnapCoordinatorManager.swift in Sources */,
+				8D2DFF224D7F2F65BEDA7307 /* SnappedWindow.swift in Sources */,
+				83226AF6B208D9051CB1084F /* SnappedWindowManager.swift in Sources */,
+				6D417961CD1CF5F7D2755CD2 /* WindowController.swift in Sources */,
+				D281BB00EBA3059845D2A69E /* WindowOperationError.swift in Sources */,
+				590E625FE84098BE901FD37D /* Zone.swift in Sources */,
+				D381C72A8C69AE794A53323E /* ZoneBoundary.swift in Sources */,
+				B8D0C99D8CD602CD81CA8C90 /* ZoneLayoutPreset.swift in Sources */,
+				11552D44BA46DCF7EF2F0991 /* ZoneManager.swift in Sources */,
+				E486A138D7730D6AED64CFF1 /* ZoneOverlayView.swift in Sources */,
+				DAE01C9F4CA605B97AAFAB76 /* ZoneRectView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B5D3E59AFC804F6ECBBE75F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 45319305CB262EC8A07B169E /* Shikiri */;
+			targetProxy = 55512242F42B3D7ABC0B97A8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5B74AE5B54C5CCCD572B1832 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stanah.Shikiri;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		98211BFD18DDBF293BB14555 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Shikiri/Shikiri.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Shikiri/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.stanah.Shikiri;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		A7D052C2C5C28CF19A753B3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Shikiri/Shikiri.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Shikiri/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.stanah.Shikiri;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		D0AEF7F82994F72E4E8FC80E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shikiri.app/Contents/MacOS/Shikiri";
+			};
+			name = Debug;
+		};
+		DE0EFBCBA9F5DC209526DC98 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stanah.Shikiri;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		E653FFB111B3B39E0D836556 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shikiri.app/Contents/MacOS/Shikiri";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		041C6C49AD9DBA8C464F9975 /* Build configuration list for PBXNativeTarget "ShikiriTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0AEF7F82994F72E4E8FC80E /* Debug */,
+				E653FFB111B3B39E0D836556 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		0F74C6C48F83D9304592689A /* Build configuration list for PBXProject "Shikiri" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE0EFBCBA9F5DC209526DC98 /* Debug */,
+				5B74AE5B54C5CCCD572B1832 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E1E23FE9835E05B4A335C0CE /* Build configuration list for PBXNativeTarget "Shikiri" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7D052C2C5C28CF19A753B3A /* Debug */,
+				98211BFD18DDBF293BB14555 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2704E7441D68C53503095397 /* Project object */;
+}
