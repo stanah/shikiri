@@ -56,4 +56,9 @@ struct ModifierFlags: OptionSet, Codable, Equatable, Hashable {
     var containsShift: Bool {
         contains(.shift)
     }
+
+    /// Commandキーが含まれているかどうか
+    var containsCommand: Bool {
+        contains(.command)
+    }
 }

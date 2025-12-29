@@ -64,6 +64,11 @@ final class OverlayController {
     func show() {
         guard !isVisible else { return }
 
+        // 前回のhideアニメーションが完了していない場合、即座にクリーンアップ
+        if !overlayWindows.isEmpty {
+            destroyOverlays()
+        }
+
         createOverlays()
         showOverlaysWithAnimation()
         isVisible = true
@@ -75,7 +80,14 @@ final class OverlayController {
 
         isVisible = false
         highlightedZoneId = nil
-        hideOverlaysWithAnimation()
+
+        // hideアニメーション中に現在のウィンドウをキャプチャ
+        // show()が呼ばれた場合でも、この参照のウィンドウだけを破棄する
+        let windowsToHide = overlayWindows
+        overlayWindows = []
+        overlayViews = []
+
+        hideOverlaysWithAnimation(windows: windowsToHide)
     }
 
     /// オーバーレイを即座に更新（修飾キー切り替え時など）
@@ -193,20 +205,27 @@ final class OverlayController {
         }
     }
 
-    private func hideOverlaysWithAnimation() {
+    private func hideOverlaysWithAnimation(windows: [OverlayWindow]) {
         if animationEnabled {
             // フェードアウト: 透明度1から0へ
             NSAnimationContext.runAnimationGroup({ context in
                 context.duration = Self.fadeAnimationDuration
                 context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                for window in self.overlayWindows {
+                for window in windows {
                     window.animator().alphaValue = 0
                 }
-            }, completionHandler: {
-                self.destroyOverlays()
+            }, completionHandler: { [windows] in
+                // MainActorで実行してキャプチャしたウィンドウを破棄
+                Task { @MainActor in
+                    for window in windows {
+                        window.orderOut(nil)
+                    }
+                }
             })
         } else {
-            destroyOverlays()
+            for window in windows {
+                window.orderOut(nil)
+            }
         }
     }
 

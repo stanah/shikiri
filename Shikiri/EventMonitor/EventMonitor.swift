@@ -34,8 +34,8 @@ final class EventMonitor {
     /// 監視が実行中かどうか
     private(set) var isRunning = false
 
-    /// Shiftキーが押されているかどうか
-    private(set) var isShiftKeyPressed = false
+    /// Commandキーが押されているかどうか
+    private(set) var isCommandKeyPressed = false
 
     /// 現在の修飾キーの組み合わせ
     private(set) var currentModifiers: ModifierFlags = ModifierFlags()
@@ -220,7 +220,7 @@ final class EventMonitor {
     }
 
     private func handleFlagsChanged(event: CGEvent) {
-        let newShiftState = event.flags.contains(.maskShift)
+        let newCommandState = event.flags.contains(.maskCommand)
         let newModifiers = ModifierFlags(cgEventFlags: event.flags)
 
         // 修飾キーの変化を通知
@@ -231,28 +231,29 @@ final class EventMonitor {
             delegate?.eventMonitor(self, modifiersChanged: newModifiers)
         }
 
-        if newShiftState != isShiftKeyPressed {
-            isShiftKeyPressed = newShiftState
-            eventLog("Shift key state changed to \(newShiftState), dragState = \(dragState)")
-            delegate?.eventMonitor(self, shiftKeyStateChanged: newShiftState)
+        if newCommandState != isCommandKeyPressed {
+            isCommandKeyPressed = newCommandState
+            eventLog("Command key state changed to \(newCommandState), dragState = \(dragState)")
+            delegate?.eventMonitor(self, commandKeyStateChanged: newCommandState)
         }
 
         // ドラッグ中に修飾キーが変わった場合の処理
         switch dragState {
         case .dragging(let startPosition):
             // スナップ可能な修飾キーの組み合わせになったらスナップモード開始
-            if newModifiers.containsShift {
+            if newModifiers.containsCommand {
                 dragState = .snapping(startPosition: startPosition)
                 // ドラッグ開始時に保存したウィンドウ情報を使用
                 eventLog("Starting snap mode with modifiers: \(newModifiers.displayName), windowInfo: \(String(describing: draggingWindowInfo))")
                 delegate?.eventMonitor(self, didStartSnapModeWith: draggingWindowInfo, modifiers: newModifiers)
             }
 
-        case .snapping:
+        case .snapping(let startPosition):
             // スナップ修飾キーでなくなったらスナップモード終了
-            if !newModifiers.containsShift {
-                eventLog("Ending snap mode - modifiers no longer valid")
-                dragState = .idle
+            // ただし、まだドラッグ中なので dragging 状態に戻す
+            if !newModifiers.containsCommand {
+                eventLog("Ending snap mode - modifiers no longer valid, back to dragging")
+                dragState = .dragging(startPosition: startPosition)
                 delegate?.eventMonitorDidEndSnapMode(self)
             }
 
@@ -270,27 +271,28 @@ final class EventMonitor {
         let cocoaPosition = convertQuartzToCocoaCoordinates(quartzPosition)
         // イベントから現在の修飾キーを取得して更新
         currentModifiers = ModifierFlags(cgEventFlags: event.flags)
-        isShiftKeyPressed = event.flags.contains(.maskShift)
+        isCommandKeyPressed = event.flags.contains(.maskCommand)
 
         eventLog("Mouse down at \(cocoaPosition) (quartz: \(quartzPosition)), modifiers = \(currentModifiers.displayName)")
 
-        // スナップ可能な修飾キーの組み合わせならスナップモード開始
-        if currentModifiers.containsShift {
-            dragState = .snapping(startPosition: cocoaPosition)
-            // AXUIElementCopyElementAtPosition はQuartz座標を使用するため、quartzPositionを渡す
-            let windowInfo = getWindowInfoAtPosition(quartzPosition)
-            eventLog("Starting snap mode with modifiers: \(currentModifiers.displayName), windowInfo = \(String(describing: windowInfo))")
-            delegate?.eventMonitor(self, didStartSnapModeWith: windowInfo, modifiers: currentModifiers)
-            return
-        }
-
-        // 境界ドラッグモードが有効で、境界上でクリックされた場合
-        if isBoundaryDragModeEnabled {
+        // Command+境界上でクリック → 境界リサイズモードを優先
+        // （ウィンドウ移動ドラッグより先にチェックする）
+        if currentModifiers.containsCommand && isBoundaryDragModeEnabled {
             if let delegate = delegate, delegate.eventMonitor(self, shouldStartBoundaryDragAt: cocoaPosition) {
-                // デリゲートが境界ドラッグを開始した
                 eventLog("Boundary drag started by delegate at \(cocoaPosition)")
                 return
             }
+        }
+
+        // スナップ可能な修飾キーの組み合わせならスナップモード開始
+        if currentModifiers.containsCommand {
+            dragState = .snapping(startPosition: cocoaPosition)
+            // AXUIElementCopyElementAtPosition はQuartz座標を使用するため、quartzPositionを渡す
+            // draggingWindowInfo に保存しておく（Command を離して再度押した時に使う）
+            draggingWindowInfo = getWindowInfoAtPosition(quartzPosition)
+            eventLog("Starting snap mode with modifiers: \(currentModifiers.displayName), windowInfo = \(String(describing: draggingWindowInfo))")
+            delegate?.eventMonitor(self, didStartSnapModeWith: draggingWindowInfo, modifiers: currentModifiers)
+            return
         }
 
         // 通常のドラッグ - ウィンドウ情報を取得して保存
@@ -355,7 +357,7 @@ final class EventMonitor {
     }
 
     private func resetState() {
-        isShiftKeyPressed = false
+        isCommandKeyPressed = false
         currentModifiers = ModifierFlags()
         dragState = .idle
         draggingWindowInfo = nil
@@ -390,12 +392,13 @@ final class EventMonitor {
     }
 
     /// 指定位置にあるウィンドウの情報を取得
-    private func getWindowInfoAtPosition(_ position: CGPoint) -> DraggedWindowInfo? {
+    /// - Parameter mousePosition: マウスのクリック位置（Quartz座標系）
+    private func getWindowInfoAtPosition(_ mousePosition: CGPoint) -> DraggedWindowInfo? {
         var element: AXUIElement?
         let systemWide = AXUIElementCreateSystemWide()
 
         // 指定位置にある要素を取得
-        let result = AXUIElementCopyElementAtPosition(systemWide, Float(position.x), Float(position.y), &element)
+        let result = AXUIElementCopyElementAtPosition(systemWide, Float(mousePosition.x), Float(mousePosition.y), &element)
 
         guard result == .success, let element = element else {
             return nil
@@ -424,7 +427,8 @@ final class EventMonitor {
             windowElement: windowElement,
             pid: pid,
             initialPosition: windowPosition,
-            initialSize: windowSize
+            initialSize: windowSize,
+            dragStartMousePosition: mousePosition
         )
     }
 

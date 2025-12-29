@@ -176,8 +176,9 @@ final class BoundaryDragCoordinator: ObservableObject {
         // 左/上のウィンドウをリサイズ
         if let window = leftOrTopWindow {
             let newFrame = calculateNewFrame(for: window, boundary: boundary, isLeftOrTop: true)
+            let quartzFrame = convertCocoaToQuartzFrame(newFrame)
             do {
-                try windowController.setWindowFrame(window.windowElement, frame: newFrame)
+                try windowController.setWindowFrame(window.windowElement, frame: quartzFrame)
             } catch {
                 print("BoundaryDragCoordinator: Failed to resize left/top window: \(error)")
             }
@@ -186,8 +187,9 @@ final class BoundaryDragCoordinator: ObservableObject {
         // 右/下のウィンドウをリサイズ
         if let window = rightOrBottomWindow {
             let newFrame = calculateNewFrame(for: window, boundary: boundary, isLeftOrTop: false)
+            let quartzFrame = convertCocoaToQuartzFrame(newFrame)
             do {
-                try windowController.setWindowFrame(window.windowElement, frame: newFrame)
+                try windowController.setWindowFrame(window.windowElement, frame: quartzFrame)
             } catch {
                 print("BoundaryDragCoordinator: Failed to resize right/bottom window: \(error)")
             }
@@ -200,6 +202,25 @@ final class BoundaryDragCoordinator: ObservableObject {
         activeBoundary = nil
         dragStartPosition = nil
         currentDelta = 0
+    }
+
+    // MARK: - Coordinate Conversion
+
+    /// Cocoa座標系（左下原点）からQuartz座標系（左上原点）にフレームを変換
+    /// - Parameter cocoaFrame: Cocoa座標系のフレーム
+    /// - Returns: Quartz座標系のフレーム
+    private func convertCocoaToQuartzFrame(_ cocoaFrame: CGRect) -> CGRect {
+        guard let primaryScreen = NSScreen.screens.first else {
+            return cocoaFrame
+        }
+        let primaryScreenHeight = primaryScreen.frame.height
+        let quartzY = primaryScreenHeight - cocoaFrame.origin.y - cocoaFrame.height
+        return CGRect(
+            x: cocoaFrame.origin.x,
+            y: quartzY,
+            width: cocoaFrame.width,
+            height: cocoaFrame.height
+        )
     }
 
     // MARK: - Private Methods

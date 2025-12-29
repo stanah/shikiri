@@ -7,23 +7,26 @@ struct DraggedWindowInfo: Equatable {
     let windowElement: AXUIElement
     /// ウィンドウが属するアプリケーションのPID
     let pid: pid_t
-    /// ドラッグ開始時のウィンドウ位置
+    /// ドラッグ開始時のウィンドウ位置（Quartz座標系）
     let initialPosition: CGPoint
     /// ドラッグ開始時のウィンドウサイズ
     let initialSize: CGSize
+    /// ドラッグ開始時のマウス位置（Quartz座標系）
+    let dragStartMousePosition: CGPoint
 
     static func == (lhs: DraggedWindowInfo, rhs: DraggedWindowInfo) -> Bool {
         return lhs.pid == rhs.pid &&
                lhs.initialPosition == rhs.initialPosition &&
-               lhs.initialSize == rhs.initialSize
+               lhs.initialSize == rhs.initialSize &&
+               lhs.dragStartMousePosition == rhs.dragStartMousePosition
     }
 }
 
 /// イベントモニターのデリゲートプロトコル
-/// ドラッグイベントやShiftキー状態の変化を通知する
+/// ドラッグイベントやCommandキー状態の変化を通知する
 @MainActor
 protocol EventMonitorDelegate: AnyObject {
-    /// スナップモード（Shift+ドラッグ）が開始された
+    /// スナップモード（Command+ドラッグ）が開始された
     /// - Parameters:
     ///   - monitor: イベントモニター
     ///   - windowInfo: ドラッグ対象のウィンドウ情報（取得できない場合はnil）
@@ -36,8 +39,8 @@ protocol EventMonitorDelegate: AnyObject {
     /// ドラッグ中にマウスが移動した
     func eventMonitor(_ monitor: EventMonitor, didDragTo position: CGPoint)
 
-    /// Shiftキーの状態が変化した
-    func eventMonitor(_ monitor: EventMonitor, shiftKeyStateChanged isPressed: Bool)
+    /// Commandキーの状態が変化した
+    func eventMonitor(_ monitor: EventMonitor, commandKeyStateChanged isPressed: Bool)
 
     /// 修飾キーの組み合わせが変化した
     func eventMonitor(_ monitor: EventMonitor, modifiersChanged modifiers: ModifierFlags)
@@ -67,14 +70,14 @@ protocol EventMonitorDelegate: AnyObject {
 // MARK: - Backward compatibility
 extension EventMonitorDelegate {
     func eventMonitorDidStartSnapMode(_ monitor: EventMonitor) {
-        eventMonitor(monitor, didStartSnapModeWith: nil, modifiers: .shift)
+        eventMonitor(monitor, didStartSnapModeWith: nil, modifiers: .command)
     }
 
     func eventMonitor(_ monitor: EventMonitor, didStartSnapModeWith windowInfo: DraggedWindowInfo?) {
-        eventMonitor(monitor, didStartSnapModeWith: windowInfo, modifiers: .shift)
+        eventMonitor(monitor, didStartSnapModeWith: windowInfo, modifiers: .command)
     }
 
-    func eventMonitor(_ monitor: EventMonitor, shiftKeyStateChanged isPressed: Bool) {
+    func eventMonitor(_ monitor: EventMonitor, commandKeyStateChanged isPressed: Bool) {
         // Optional method - default implementation does nothing
     }
 

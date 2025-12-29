@@ -27,6 +27,25 @@ extension OverlayController: OverlayControlling {}
 
 extension WindowController: WindowControlling {}
 
+/// ログをファイルに書き込む
+private func snapLog(_ message: String) {
+    let logPath = "/tmp/shikiri_app.log"
+    let timestamp = ISO8601DateFormatter().string(from: Date())
+    let logMessage = "[\(timestamp)] [SnapCoordinator] \(message)\n"
+    print("[SnapCoordinator] \(message)")
+    if let data = logMessage.data(using: .utf8) {
+        if FileManager.default.fileExists(atPath: logPath) {
+            if let handle = FileHandle(forWritingAtPath: logPath) {
+                handle.seekToEndOfFile()
+                handle.write(data)
+                handle.closeFile()
+            }
+        } else {
+            FileManager.default.createFile(atPath: logPath, contents: data)
+        }
+    }
+}
+
 // MARK: - SnapCoordinator
 
 /// スナップ処理全体を調整するコーディネーター
@@ -48,6 +67,21 @@ final class SnapCoordinator: EventMonitorDelegate {
     var isBoundaryDragEnabled: Bool {
         get { boundaryDragCoordinator != nil }
     }
+
+    /// 境界リサイズモードかどうか（スナップ済みウィンドウをリサイズ中）
+    private var isBoundaryResizeMode = false
+
+    /// 境界リサイズのドラッグ開始位置
+    private var boundaryResizeStartPosition: CGPoint?
+
+    /// 隣接ウィンドウの要素
+    private var adjacentWindowElement: AXUIElement?
+
+    /// 隣接ウィンドウの初期フレーム
+    private var adjacentWindowInitialFrame: CGRect?
+
+    /// ドラッグ中のエッジの向き
+    private var draggingEdgeOrientation: BoundaryOrientation?
 
     // MARK: - Dependencies
 
@@ -107,9 +141,12 @@ final class SnapCoordinator: EventMonitorDelegate {
     /// - Parameters:
     ///   - windowInfo: ドラッグ対象のウィンドウ情報
     ///   - modifiers: 押されている修飾キーの組み合わせ
-    func handleSnapModeStarted(with windowInfo: DraggedWindowInfo?, modifiers: ModifierFlags = .shift) {
+    func handleSnapModeStarted(with windowInfo: DraggedWindowInfo?, modifiers: ModifierFlags = .command) {
+        snapLog("handleSnapModeStarted called, windowInfo: \(windowInfo != nil), modifiers: \(modifiers.displayName)")
+
         guard let windowInfo = windowInfo else {
             // ウィンドウ情報がない場合はスナップを開始しない
+            snapLog("No windowInfo, returning without starting snap mode")
             return
         }
 
@@ -124,7 +161,200 @@ final class SnapCoordinator: EventMonitorDelegate {
 
         isSnapping = true
         currentWindowInfo = windowInfo
-        overlayController.show()
+
+        // 境界リサイズモードの判定
+        // ドラッグ中のウィンドウがスナップ済みで、境界付近でドラッグ開始した場合
+        checkAndEnterBoundaryResizeMode(windowInfo: windowInfo)
+
+        snapLog("After boundary check: isBoundaryResizeMode = \(isBoundaryResizeMode)")
+
+        // 境界リサイズモードでなければオーバーレイを表示
+        if !isBoundaryResizeMode {
+            snapLog("Showing overlay")
+            overlayController.show()
+        } else {
+            snapLog("Skipping overlay - boundary resize mode active")
+        }
+    }
+
+    /// 境界リサイズモードに入るかチェック
+    /// snappedWindowsリストに依存せず、実際の画面上のウィンドウ位置から隣接ウィンドウを探す
+    private func checkAndEnterBoundaryResizeMode(windowInfo: DraggedWindowInfo) {
+        snapLog(" Checking boundary resize mode")
+
+        // ドラッグ開始時のマウス位置とウィンドウのフレーム（Quartz座標系）
+        let mouseX = windowInfo.dragStartMousePosition.x
+        let mouseY = windowInfo.dragStartMousePosition.y
+        let windowFrame = CGRect(
+            origin: windowInfo.initialPosition,
+            size: windowInfo.initialSize
+        )
+
+        // ウィンドウのエッジからの距離の許容値（ウィンドウの枠付近でのドラッグのみ境界リサイズ）
+        let edgeTolerance: CGFloat = 10
+
+        snapLog(" mousePosition: (\(mouseX), \(mouseY)), windowFrame: \(windowFrame)")
+
+        // どのエッジをドラッグしているかを判定
+        // マウス位置がウィンドウの枠に近い場合のみ境界リサイズと判定
+        var draggingEdge: BoundaryOrientation?
+        var edgePosition: CGFloat = 0
+
+        // 左端付近（マウスがウィンドウの左枠に近い）
+        if abs(mouseX - windowFrame.minX) < edgeTolerance {
+            draggingEdge = .vertical
+            edgePosition = windowFrame.minX
+            snapLog(" Dragging left edge")
+        }
+        // 右端付近（マウスがウィンドウの右枠に近い）
+        else if abs(mouseX - windowFrame.maxX) < edgeTolerance {
+            draggingEdge = .vertical
+            edgePosition = windowFrame.maxX
+            snapLog(" Dragging right edge")
+        }
+        // 上端付近（Quartz座標系では上がminY、マウスがウィンドウの上枠に近い）
+        else if abs(mouseY - windowFrame.minY) < edgeTolerance {
+            draggingEdge = .horizontal
+            edgePosition = windowFrame.minY
+            snapLog(" Dragging top edge")
+        }
+        // 下端付近（マウスがウィンドウの下枠に近い）
+        else if abs(mouseY - windowFrame.maxY) < edgeTolerance {
+            draggingEdge = .horizontal
+            edgePosition = windowFrame.maxY
+            snapLog(" Dragging bottom edge")
+        }
+
+        guard let edge = draggingEdge else {
+            snapLog(" Not near any edge, normal snap mode")
+            return
+        }
+
+        // そのエッジに隣接するウィンドウを探す
+        guard let adjacentWindow = findAdjacentWindow(
+            to: windowInfo.windowElement,
+            at: edgePosition,
+            orientation: edge,
+            windowFrame: windowFrame
+        ) else {
+            snapLog(" No adjacent window found")
+            return
+        }
+
+        snapLog(" Found adjacent window, entering boundary resize mode")
+
+        // 境界リサイズモードに入る
+        isBoundaryResizeMode = true
+        boundaryResizeStartPosition = CGPoint(x: mouseX, y: mouseY)
+        adjacentWindowElement = adjacentWindow
+        adjacentWindowInitialFrame = getWindowFrame(adjacentWindow)
+        draggingEdgeOrientation = edge
+    }
+
+    /// 隣接するウィンドウを探す
+    private func findAdjacentWindow(
+        to windowElement: AXUIElement,
+        at edgePosition: CGFloat,
+        orientation: BoundaryOrientation,
+        windowFrame: CGRect
+    ) -> AXUIElement? {
+        // 隣接判定の許容範囲（ウィンドウ間のギャップ + マージン）
+        let adjacentTolerance: CGFloat = CGFloat(Settings.shared.windowGap) + 5
+
+        // 画面上の全ウィンドウを取得
+        let windows = getAllWindows()
+
+        for window in windows {
+            // 自分自身はスキップ
+            if CFEqual(window, windowElement) {
+                continue
+            }
+
+            guard let frame = getWindowFrame(window) else {
+                continue
+            }
+
+            switch orientation {
+            case .vertical:
+                // 垂直方向のエッジ（左右）の場合
+                // Y座標の範囲が重なっているか確認
+                let overlapMinY = max(windowFrame.minY, frame.minY)
+                let overlapMaxY = min(windowFrame.maxY, frame.maxY)
+                guard overlapMinY < overlapMaxY else { continue }
+
+                // 隣接しているか確認（エッジ位置が近い）
+                if abs(frame.maxX - edgePosition) < adjacentTolerance ||
+                   abs(frame.minX - edgePosition) < adjacentTolerance {
+                    snapLog(" Found adjacent window at vertical edge")
+                    return window
+                }
+
+            case .horizontal:
+                // 水平方向のエッジ（上下）の場合
+                // X座標の範囲が重なっているか確認
+                let overlapMinX = max(windowFrame.minX, frame.minX)
+                let overlapMaxX = min(windowFrame.maxX, frame.maxX)
+                guard overlapMinX < overlapMaxX else { continue }
+
+                // 隣接しているか確認（エッジ位置が近い）
+                if abs(frame.maxY - edgePosition) < adjacentTolerance ||
+                   abs(frame.minY - edgePosition) < adjacentTolerance {
+                    snapLog(" Found adjacent window at horizontal edge")
+                    return window
+                }
+            }
+        }
+
+        return nil
+    }
+
+    /// 画面上の全ウィンドウを取得
+    private func getAllWindows() -> [AXUIElement] {
+        var windows: [AXUIElement] = []
+
+        // 実行中のアプリケーションを取得
+        let runningApps = NSWorkspace.shared.runningApplications.filter {
+            $0.activationPolicy == .regular
+        }
+
+        for app in runningApps {
+            let appElement = AXUIElementCreateApplication(app.processIdentifier)
+
+            var windowsRef: CFTypeRef?
+            let result = AXUIElementCopyAttributeValue(
+                appElement,
+                kAXWindowsAttribute as CFString,
+                &windowsRef
+            )
+
+            if result == .success, let windowArray = windowsRef as? [AXUIElement] {
+                windows.append(contentsOf: windowArray)
+            }
+        }
+
+        return windows
+    }
+
+    /// ウィンドウのフレームを取得（Quartz座標系）
+    private func getWindowFrame(_ window: AXUIElement) -> CGRect? {
+        var positionRef: CFTypeRef?
+        var sizeRef: CFTypeRef?
+
+        let posResult = AXUIElementCopyAttributeValue(window, kAXPositionAttribute as CFString, &positionRef)
+        let sizeResult = AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &sizeRef)
+
+        guard posResult == .success, sizeResult == .success,
+              let positionRef = positionRef, let sizeRef = sizeRef else {
+            return nil
+        }
+
+        var position = CGPoint.zero
+        var size = CGSize.zero
+
+        AXValueGetValue(positionRef as! AXValue, .cgPoint, &position)
+        AXValueGetValue(sizeRef as! AXValue, .cgSize, &size)
+
+        return CGRect(origin: position, size: size)
     }
 
     /// ドラッグ中の移動を処理
@@ -132,6 +362,13 @@ final class SnapCoordinator: EventMonitorDelegate {
     func handleDragMoved(to position: CGPoint) {
         guard isSnapping else { return }
 
+        // 境界リサイズモードの場合
+        if isBoundaryResizeMode {
+            handleBoundaryResizeDrag(to: position)
+            return
+        }
+
+        // 通常のスナップモード
         // ゾーンの更新
         let point = NSPoint(x: position.x, y: position.y)
         zoneManager.updateActiveZone(for: point)
@@ -144,10 +381,88 @@ final class SnapCoordinator: EventMonitorDelegate {
         }
     }
 
+    /// 境界リサイズのドラッグ処理
+    private func handleBoundaryResizeDrag(to position: CGPoint) {
+        guard let startPosition = boundaryResizeStartPosition,
+              let adjacentWindow = adjacentWindowElement,
+              let initialFrame = adjacentWindowInitialFrame,
+              let orientation = draggingEdgeOrientation else {
+            return
+        }
+
+        // Cocoa座標をQuartz座標に変換
+        let quartzPosition = convertCocoaToQuartzPoint(position)
+
+        // 移動量を計算
+        let delta: CGFloat
+        switch orientation {
+        case .vertical:
+            delta = quartzPosition.x - startPosition.x
+        case .horizontal:
+            delta = quartzPosition.y - startPosition.y
+        }
+
+        // 隣接ウィンドウの新しいフレームを計算（Quartz座標系で計算）
+        var newFrame = initialFrame
+
+        switch orientation {
+        case .vertical:
+            // ドラッグしているエッジが隣接ウィンドウのどちら側かで処理を分ける
+            // 隣接ウィンドウの右端がドラッグ位置に近い → 隣接ウィンドウは左側
+            if abs(initialFrame.maxX - startPosition.x) < abs(initialFrame.minX - startPosition.x) {
+                // 隣接ウィンドウが左側 → 幅を変更
+                newFrame.size.width += delta
+            } else {
+                // 隣接ウィンドウが右側 → x位置と幅を変更
+                newFrame.origin.x += delta
+                newFrame.size.width -= delta
+            }
+        case .horizontal:
+            if abs(initialFrame.maxY - startPosition.y) < abs(initialFrame.minY - startPosition.y) {
+                // 隣接ウィンドウが上側 → 高さを変更
+                newFrame.size.height += delta
+            } else {
+                // 隣接ウィンドウが下側 → y位置と高さを変更
+                newFrame.origin.y += delta
+                newFrame.size.height -= delta
+            }
+        }
+
+        // 最小サイズチェック
+        let minWidth: CGFloat = 200
+        let minHeight: CGFloat = 100
+        guard newFrame.width >= minWidth && newFrame.height >= minHeight else {
+            return
+        }
+
+        // Quartz座標のままウィンドウをリサイズ
+        do {
+            try windowController.setWindowFrame(adjacentWindow, frame: newFrame)
+        } catch {
+            snapLog(" Failed to resize adjacent window: \(error)")
+        }
+    }
+
+    /// Cocoa座標をQuartz座標に変換
+    private func convertCocoaToQuartzPoint(_ cocoaPoint: CGPoint) -> CGPoint {
+        guard let primaryScreen = NSScreen.screens.first else {
+            return cocoaPoint
+        }
+        let primaryScreenHeight = primaryScreen.frame.height
+        let quartzY = primaryScreenHeight - cocoaPoint.y
+        return CGPoint(x: cocoaPoint.x, y: quartzY)
+    }
+
     /// スナップモードを終了（ウィンドウをスナップ）
     func handleSnapModeEnded() {
         defer {
             cleanupSnapState()
+        }
+
+        // 境界リサイズモードの場合はスナップを行わない
+        if isBoundaryResizeMode {
+            snapLog(" Boundary resize mode ended")
+            return
         }
 
         guard isSnapping,
@@ -174,7 +489,7 @@ final class SnapCoordinator: EventMonitorDelegate {
             )
         } catch {
             // エラーが発生してもクリーンアップは行う
-            print("SnapCoordinator: Failed to set window frame: \(error)")
+            snapLog(" Failed to set window frame: \(error)")
         }
     }
 
@@ -183,7 +498,10 @@ final class SnapCoordinator: EventMonitorDelegate {
         windowElement: AXUIElement,
         zone: Zone
     ) {
-        guard let coordinator = boundaryDragCoordinator else { return }
+        guard let coordinator = boundaryDragCoordinator else {
+            snapLog("registerSnappedWindow: No coordinator")
+            return
+        }
 
         // 画面IDを取得
         let screenId = getScreenId(for: zone.frame)
@@ -197,6 +515,8 @@ final class SnapCoordinator: EventMonitorDelegate {
 
         // ゾーンから境界を再検出（ゾーンが変わっている可能性があるため）
         coordinator.setupBoundaries(from: zoneManager.zones)
+
+        snapLog("registerSnappedWindow: Registered window, total count: \(coordinator.snappedWindows.count), boundaries: \(coordinator.boundaries.count)")
     }
 
     // MARK: - Coordinate Conversion
@@ -235,11 +555,11 @@ final class SnapCoordinator: EventMonitorDelegate {
         return NSScreen.main?.localizedName ?? "Main"
     }
 
-    /// Shiftキーの状態変化を処理
-    /// - Parameter isPressed: Shiftキーが押されているかどうか
-    func handleShiftKeyStateChanged(_ isPressed: Bool) {
+    /// Commandキーの状態変化を処理
+    /// - Parameter isPressed: Commandキーが押されているかどうか
+    func handleCommandKeyStateChanged(_ isPressed: Bool) {
         if !isPressed && isSnapping {
-            // Shiftが離されたらスナップをキャンセル
+            // Commandが離されたらスナップをキャンセル
             cancelSnap()
         }
     }
@@ -247,9 +567,9 @@ final class SnapCoordinator: EventMonitorDelegate {
     /// 修飾キーの組み合わせ変化を処理
     /// - Parameter modifiers: 新しい修飾キーの組み合わせ
     func handleModifiersChanged(_ modifiers: ModifierFlags) {
-        // スナップ中かつShiftが押されている場合のみオーバーレイを更新
-        // Shiftが離された場合はスナップモード終了処理で対応
-        guard isSnapping, modifiers.containsShift else { return }
+        // スナップ中かつCommandが押されている場合のみオーバーレイを更新
+        // Commandが離された場合はスナップモード終了処理で対応
+        guard isSnapping, modifiers.containsCommand else { return }
 
         // スナップ中に修飾キーが変わったらゾーンを再生成してオーバーレイを更新
         // refreshOverlayを使って即座に切り替え（アニメーションなし）
@@ -275,6 +595,13 @@ final class SnapCoordinator: EventMonitorDelegate {
         currentPreset = nil
         zoneManager.clearActiveZone()
         overlayController.hide()
+
+        // 境界リサイズモードの状態もクリア
+        isBoundaryResizeMode = false
+        boundaryResizeStartPosition = nil
+        adjacentWindowElement = nil
+        adjacentWindowInitialFrame = nil
+        draggingEdgeOrientation = nil
     }
 
     // MARK: - EventMonitorDelegate
@@ -291,8 +618,8 @@ final class SnapCoordinator: EventMonitorDelegate {
         handleDragMoved(to: position)
     }
 
-    func eventMonitor(_ monitor: EventMonitor, shiftKeyStateChanged isPressed: Bool) {
-        handleShiftKeyStateChanged(isPressed)
+    func eventMonitor(_ monitor: EventMonitor, commandKeyStateChanged isPressed: Bool) {
+        handleCommandKeyStateChanged(isPressed)
     }
 
     func eventMonitor(_ monitor: EventMonitor, modifiersChanged modifiers: ModifierFlags) {

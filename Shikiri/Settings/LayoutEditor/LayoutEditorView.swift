@@ -13,7 +13,7 @@ struct LayoutEditorView: View {
     @State private var selectedScreenIndex: Int = 0
 
     /// 選択中の修飾キー
-    @State private var selectedModifiers: ModifierFlags = .shift
+    @State private var selectedModifiers: ModifierFlags = .command
 
     /// 編集中のゾーン定義
     @State private var editingZones: [ZoneDefinition] = []
@@ -32,9 +32,9 @@ struct LayoutEditorView: View {
 
     /// 利用可能な修飾キーの組み合わせ
     private let availableModifiers: [ModifierFlags] = [
-        .shift,
-        ModifierFlags([.shift, .option]),
-        ModifierFlags([.shift, .control])
+        .command,
+        ModifierFlags([.command, .option]),
+        ModifierFlags([.command, .control])
     ]
 
     // MARK: - Body
