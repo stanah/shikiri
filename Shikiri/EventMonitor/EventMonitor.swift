@@ -220,8 +220,11 @@ final class EventMonitor {
     }
 
     private func handleFlagsChanged(event: CGEvent) {
+        let rawFlags = event.flags.rawValue
         let newCommandState = event.flags.contains(.maskCommand)
         let newModifiers = ModifierFlags(cgEventFlags: event.flags)
+
+        eventLog("FlagsChanged raw: \(rawFlags), command: \(newCommandState), modifiers: \(newModifiers.displayName)")
 
         // 修飾キーの変化を通知
         if newModifiers != currentModifiers {
@@ -270,10 +273,11 @@ final class EventMonitor {
         let quartzPosition = event.location
         let cocoaPosition = convertQuartzToCocoaCoordinates(quartzPosition)
         // イベントから現在の修飾キーを取得して更新
+        let rawFlags = event.flags.rawValue
         currentModifiers = ModifierFlags(cgEventFlags: event.flags)
         isCommandKeyPressed = event.flags.contains(.maskCommand)
 
-        eventLog("Mouse down at \(cocoaPosition) (quartz: \(quartzPosition)), modifiers = \(currentModifiers.displayName)")
+        eventLog("Mouse down at \(cocoaPosition) (quartz: \(quartzPosition)), rawFlags = \(rawFlags), modifiers = \(currentModifiers.displayName)")
 
         // Command+境界上でクリック → 境界リサイズモードを優先
         // （ウィンドウ移動ドラッグより先にチェックする）
@@ -401,12 +405,14 @@ final class EventMonitor {
         let result = AXUIElementCopyElementAtPosition(systemWide, Float(mousePosition.x), Float(mousePosition.y), &element)
 
         guard result == .success, let element = element else {
+            eventLog("getWindowInfoAtPosition failed: AXUIElementCopyElementAtPosition returned \(result.rawValue) at \(mousePosition)")
             return nil
         }
 
         // ウィンドウ要素を取得（要素がウィンドウでない場合は親をたどる）
         let windowElement = findWindowElement(from: element)
         guard let windowElement = windowElement else {
+            eventLog("getWindowInfoAtPosition failed: Could not find window element at \(mousePosition)")
             return nil
         }
 

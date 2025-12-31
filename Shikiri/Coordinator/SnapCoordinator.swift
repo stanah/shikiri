@@ -68,6 +68,9 @@ final class SnapCoordinator: EventMonitorDelegate {
         get { boundaryDragCoordinator != nil }
     }
 
+    /// モード決定待ちかどうか（ドラッグ開始直後、移動かリサイズか未確定）
+    private var isPendingModeDecision = false
+
     /// 境界リサイズモードかどうか（スナップ済みウィンドウをリサイズ中）
     private var isBoundaryResizeMode = false
 
@@ -82,6 +85,9 @@ final class SnapCoordinator: EventMonitorDelegate {
 
     /// ドラッグ中のエッジの向き
     private var draggingEdgeOrientation: BoundaryOrientation?
+
+    /// 現在の修飾キー（モード決定時にゾーン生成に使用）
+    private var pendingModifiers: ModifierFlags = .command
 
     // MARK: - Dependencies
 
@@ -150,105 +156,14 @@ final class SnapCoordinator: EventMonitorDelegate {
             return
         }
 
-        // 画面ごと × 修飾キーごとの設定を使用
-        // 各画面に対して、その画面の修飾キー設定に基づいたプリセットを適用
-        zoneManager.setupZonesWithPerScreenPresets(
-            modifiers: modifiers,
-            fallbackPreset: presetManager.currentPreset,
-            gap: CGFloat(Settings.shared.windowGap)
-        )
-        currentPreset = nil  // 画面ごとに異なるため nil
-
-        isSnapping = true
+        // ウィンドウ情報と修飾キーを保存
         currentWindowInfo = windowInfo
+        pendingModifiers = modifiers
+        currentPreset = nil
+        isSnapping = true
 
-        // 境界リサイズモードの判定
-        // ドラッグ中のウィンドウがスナップ済みで、境界付近でドラッグ開始した場合
-        checkAndEnterBoundaryResizeMode(windowInfo: windowInfo)
-
-        snapLog("After boundary check: isBoundaryResizeMode = \(isBoundaryResizeMode)")
-
-        // 境界リサイズモードでなければオーバーレイを表示
-        if !isBoundaryResizeMode {
-            snapLog("Showing overlay")
-            overlayController.show()
-        } else {
-            snapLog("Skipping overlay - boundary resize mode active")
-        }
-    }
-
-    /// 境界リサイズモードに入るかチェック
-    /// snappedWindowsリストに依存せず、実際の画面上のウィンドウ位置から隣接ウィンドウを探す
-    private func checkAndEnterBoundaryResizeMode(windowInfo: DraggedWindowInfo) {
-        snapLog(" Checking boundary resize mode")
-
-        // ドラッグ開始時のマウス位置とウィンドウのフレーム（Quartz座標系）
-        let mouseX = windowInfo.dragStartMousePosition.x
-        let mouseY = windowInfo.dragStartMousePosition.y
-        let windowFrame = CGRect(
-            origin: windowInfo.initialPosition,
-            size: windowInfo.initialSize
-        )
-
-        // ウィンドウのエッジからの距離の許容値（ウィンドウの枠付近でのドラッグのみ境界リサイズ）
-        let edgeTolerance: CGFloat = 10
-
-        snapLog(" mousePosition: (\(mouseX), \(mouseY)), windowFrame: \(windowFrame)")
-
-        // どのエッジをドラッグしているかを判定
-        // マウス位置がウィンドウの枠に近い場合のみ境界リサイズと判定
-        var draggingEdge: BoundaryOrientation?
-        var edgePosition: CGFloat = 0
-
-        // 左端付近（マウスがウィンドウの左枠に近い）
-        if abs(mouseX - windowFrame.minX) < edgeTolerance {
-            draggingEdge = .vertical
-            edgePosition = windowFrame.minX
-            snapLog(" Dragging left edge")
-        }
-        // 右端付近（マウスがウィンドウの右枠に近い）
-        else if abs(mouseX - windowFrame.maxX) < edgeTolerance {
-            draggingEdge = .vertical
-            edgePosition = windowFrame.maxX
-            snapLog(" Dragging right edge")
-        }
-        // 上端付近（Quartz座標系では上がminY、マウスがウィンドウの上枠に近い）
-        else if abs(mouseY - windowFrame.minY) < edgeTolerance {
-            draggingEdge = .horizontal
-            edgePosition = windowFrame.minY
-            snapLog(" Dragging top edge")
-        }
-        // 下端付近（マウスがウィンドウの下枠に近い）
-        else if abs(mouseY - windowFrame.maxY) < edgeTolerance {
-            draggingEdge = .horizontal
-            edgePosition = windowFrame.maxY
-            snapLog(" Dragging bottom edge")
-        }
-
-        guard let edge = draggingEdge else {
-            snapLog(" Not near any edge, normal snap mode")
-            return
-        }
-
-        // そのエッジに隣接するウィンドウを探す
-        guard let adjacentWindow = findAdjacentWindow(
-            to: windowInfo.windowElement,
-            at: edgePosition,
-            orientation: edge,
-            windowFrame: windowFrame
-        ) else {
-            snapLog(" No adjacent window found")
-            return
-        }
-
-        snapLog(" Found adjacent window, entering boundary resize mode")
-
-        // 境界リサイズモードに入る
-        isBoundaryResizeMode = true
-        boundaryResizeStartPosition = CGPoint(x: mouseX, y: mouseY)
-        adjacentWindowElement = adjacentWindow
-        adjacentWindowInitialFrame = getWindowFrame(adjacentWindow)
-        draggingEdgeOrientation = edge
+        // 直接スナップモードに入る（オーバーレイを表示）
+        enterSnapMode()
     }
 
     /// 隣接するウィンドウを探す
@@ -362,13 +277,6 @@ final class SnapCoordinator: EventMonitorDelegate {
     func handleDragMoved(to position: CGPoint) {
         guard isSnapping else { return }
 
-        // 境界リサイズモードの場合
-        if isBoundaryResizeMode {
-            handleBoundaryResizeDrag(to: position)
-            return
-        }
-
-        // 通常のスナップモード
         // ゾーンの更新
         let point = NSPoint(x: position.x, y: position.y)
         zoneManager.updateActiveZone(for: point)
@@ -379,6 +287,137 @@ final class SnapCoordinator: EventMonitorDelegate {
         } else {
             overlayController.clearHighlight()
         }
+    }
+
+    /// サイズ変化を確認してモードを決定
+    private func decideModeBasedOnSizeChange() {
+        guard isPendingModeDecision, let windowInfo = currentWindowInfo else { return }
+
+        isPendingModeDecision = false
+
+        // 現在のウィンドウサイズを取得
+        guard let currentSize = getWindowSize(windowInfo.windowElement) else {
+            snapLog("Could not get current window size, defaulting to snap mode")
+            enterSnapMode()
+            return
+        }
+
+        let initialSize = windowInfo.initialSize
+        let sizeTolerance: CGFloat = 5  // 5ピクセルの許容誤差
+
+        let widthChanged = abs(currentSize.width - initialSize.width) > sizeTolerance
+        let heightChanged = abs(currentSize.height - initialSize.height) > sizeTolerance
+
+        snapLog("Size check: initial=\(initialSize), current=\(currentSize), widthChanged=\(widthChanged), heightChanged=\(heightChanged)")
+
+        if widthChanged || heightChanged {
+            // サイズが変化した → リサイズ中 → 境界リサイズモード
+            snapLog("Size changed, entering boundary resize mode")
+            enterBoundaryResizeMode(windowInfo: windowInfo)
+        } else {
+            // サイズが変化していない → 移動中 → 通常スナップモード
+            snapLog("Size unchanged, entering snap mode")
+            enterSnapMode()
+        }
+    }
+
+    /// 通常のスナップモードに入る
+    private func enterSnapMode() {
+        // 画面ごと × 修飾キーごとの設定を使用
+        zoneManager.setupZonesWithPerScreenPresets(
+            modifiers: pendingModifiers,
+            fallbackPreset: presetManager.currentPreset,
+            gap: CGFloat(Settings.shared.windowGap)
+        )
+
+        snapLog("Showing overlay")
+        overlayController.show()
+    }
+
+    /// 境界リサイズモードに入る
+    private func enterBoundaryResizeMode(windowInfo: DraggedWindowInfo) {
+        // 隣接ウィンドウを探す
+        guard let adjacentWindow = findAdjacentWindowForResize(windowInfo: windowInfo) else {
+            snapLog("No adjacent window found, falling back to snap mode")
+            enterSnapMode()
+            return
+        }
+
+        snapLog("Found adjacent window, entering boundary resize mode")
+
+        isBoundaryResizeMode = true
+        boundaryResizeStartPosition = windowInfo.dragStartMousePosition
+        adjacentWindowElement = adjacentWindow.element
+        adjacentWindowInitialFrame = adjacentWindow.initialFrame
+        draggingEdgeOrientation = adjacentWindow.orientation
+    }
+
+    /// リサイズ用の隣接ウィンドウを探す
+    private func findAdjacentWindowForResize(windowInfo: DraggedWindowInfo) -> (element: AXUIElement, initialFrame: CGRect, orientation: BoundaryOrientation)? {
+        let windowFrame = CGRect(origin: windowInfo.initialPosition, size: windowInfo.initialSize)
+
+        // 現在のウィンドウフレームを取得して、どの方向にリサイズされているか判定
+        guard let currentFrame = getWindowFrame(windowInfo.windowElement) else {
+            return nil
+        }
+
+        let initialSize = windowInfo.initialSize
+        let widthDelta = currentFrame.width - initialSize.width
+        let heightDelta = currentFrame.height - initialSize.height
+
+        // どのエッジがリサイズされているかを判定
+        var orientation: BoundaryOrientation
+        var edgePosition: CGFloat
+
+        if abs(widthDelta) > abs(heightDelta) {
+            // 幅が変化 → 左右のエッジをリサイズ
+            orientation = .vertical
+            // 左端が変化したか右端が変化したかを判定
+            if abs(currentFrame.minX - windowFrame.minX) > 1 {
+                edgePosition = windowFrame.minX
+            } else {
+                edgePosition = windowFrame.maxX
+            }
+        } else {
+            // 高さが変化 → 上下のエッジをリサイズ
+            orientation = .horizontal
+            // 上端が変化したか下端が変化したかを判定
+            if abs(currentFrame.minY - windowFrame.minY) > 1 {
+                edgePosition = windowFrame.minY
+            } else {
+                edgePosition = windowFrame.maxY
+            }
+        }
+
+        // そのエッジに隣接するウィンドウを探す
+        guard let adjacentWindow = findAdjacentWindow(
+            to: windowInfo.windowElement,
+            at: edgePosition,
+            orientation: orientation,
+            windowFrame: windowFrame
+        ) else {
+            return nil
+        }
+
+        guard let adjacentFrame = getWindowFrame(adjacentWindow) else {
+            return nil
+        }
+
+        return (adjacentWindow, adjacentFrame, orientation)
+    }
+
+    /// ウィンドウのサイズを取得
+    private func getWindowSize(_ window: AXUIElement) -> CGSize? {
+        var sizeRef: CFTypeRef?
+        let result = AXUIElementCopyAttributeValue(window, kAXSizeAttribute as CFString, &sizeRef)
+
+        guard result == .success, let sizeRef = sizeRef else {
+            return nil
+        }
+
+        var size = CGSize.zero
+        AXValueGetValue(sizeRef as! AXValue, .cgSize, &size)
+        return size
     }
 
     /// 境界リサイズのドラッグ処理
@@ -457,12 +496,6 @@ final class SnapCoordinator: EventMonitorDelegate {
     func handleSnapModeEnded() {
         defer {
             cleanupSnapState()
-        }
-
-        // 境界リサイズモードの場合はスナップを行わない
-        if isBoundaryResizeMode {
-            snapLog(" Boundary resize mode ended")
-            return
         }
 
         guard isSnapping,
@@ -595,6 +628,9 @@ final class SnapCoordinator: EventMonitorDelegate {
         currentPreset = nil
         zoneManager.clearActiveZone()
         overlayController.hide()
+
+        // モード決定待ち状態をクリア
+        isPendingModeDecision = false
 
         // 境界リサイズモードの状態もクリア
         isBoundaryResizeMode = false
