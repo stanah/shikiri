@@ -27,23 +27,9 @@ extension OverlayController: OverlayControlling {}
 
 extension WindowController: WindowControlling {}
 
-/// ログをファイルに書き込む
+/// ログを出力する
 private func snapLog(_ message: String) {
-    let logPath = "/tmp/shikiri_app.log"
-    let timestamp = ISO8601DateFormatter().string(from: Date())
-    let logMessage = "[\(timestamp)] [SnapCoordinator] \(message)\n"
-    print("[SnapCoordinator] \(message)")
-    if let data = logMessage.data(using: .utf8) {
-        if FileManager.default.fileExists(atPath: logPath) {
-            if let handle = FileHandle(forWritingAtPath: logPath) {
-                handle.seekToEndOfFile()
-                handle.write(data)
-                handle.closeFile()
-            }
-        } else {
-            FileManager.default.createFile(atPath: logPath, contents: data)
-        }
-    }
+    ShikiriLogger.log(message, category: "SnapCoordinator")
 }
 
 // MARK: - SnapCoordinator

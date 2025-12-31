@@ -3,23 +3,9 @@ import AppKit
 import CoreGraphics
 import Foundation
 
-/// ログをファイルに書き込む
+/// ログを出力する
 private func eventLog(_ message: String) {
-    let logPath = "/tmp/shikiri_app.log"
-    let timestamp = ISO8601DateFormatter().string(from: Date())
-    let logMessage = "[\(timestamp)] [EventMonitor] \(message)\n"
-    print("[EventMonitor] \(message)")
-    if let data = logMessage.data(using: .utf8) {
-        if FileManager.default.fileExists(atPath: logPath) {
-            if let handle = FileHandle(forWritingAtPath: logPath) {
-                handle.seekToEndOfFile()
-                handle.write(data)
-                handle.closeFile()
-            }
-        } else {
-            FileManager.default.createFile(atPath: logPath, contents: data)
-        }
-    }
+    ShikiriLogger.log(message, category: "EventMonitor")
 }
 
 /// グローバルマウスイベントを監視するクラス

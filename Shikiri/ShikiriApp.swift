@@ -1,30 +1,10 @@
 import SwiftUI
 import Combine
 import AppKit
-import os.log
 
-private let logger = Logger(subsystem: "com.stanah.Shikiri", category: "App")
-
-/// デバッグログをファイルに書き込む
+/// ログを出力する
 private func debugLog(_ message: String) {
-    logger.info("\(message)")
-    print("[Shikiri] \(message)")
-
-    // ファイルにも書き込み
-    let logPath = "/tmp/shikiri_app.log"
-    let timestamp = ISO8601DateFormatter().string(from: Date())
-    let logMessage = "[\(timestamp)] \(message)\n"
-    if let data = logMessage.data(using: .utf8) {
-        if FileManager.default.fileExists(atPath: logPath) {
-            if let handle = FileHandle(forWritingAtPath: logPath) {
-                handle.seekToEndOfFile()
-                handle.write(data)
-                handle.closeFile()
-            }
-        } else {
-            FileManager.default.createFile(atPath: logPath, contents: data)
-        }
-    }
+    ShikiriLogger.log(message, category: "App")
 }
 
 /// アプリの初期化と状態管理を担当するクラス

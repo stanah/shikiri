@@ -62,6 +62,7 @@
 		D381C72A8C69AE794A53323E /* ZoneBoundary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9032066E78AE0069AC274650 /* ZoneBoundary.swift */; };
 		DAE01C9F4CA605B97AAFAB76 /* ZoneRectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 977538184179B1A11CDCD69B /* ZoneRectView.swift */; };
 		DE02628CCB3BF2165A4C585F /* ScreenIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A798123D05D68C58EDE69B0 /* ScreenIdentifierTests.swift */; };
+		DF5564808DE01CB33939CE49 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DA31C849B5B43DB4C014F8 /* Logger.swift */; };
 		E486A138D7730D6AED64CFF1 /* ZoneOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404CC3F7E476E7F21461983D /* ZoneOverlayView.swift */; };
 		E71544EF45570B58AC2692D6 /* OverlayWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B455F73159F0D4C9C59558 /* OverlayWindowTests.swift */; };
 		EBFFF7B4B3F9EA3F099F1772 /* ScreenLayoutManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D00D31C3E6CD9D5203B09D /* ScreenLayoutManagerTests.swift */; };
@@ -96,6 +97,7 @@
 		4F8AD5DB81B21FFB94F97954 /* SnappedWindowManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnappedWindowManagerTests.swift; sourceTree = "<group>"; };
 		54B455F73159F0D4C9C59558 /* OverlayWindowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindowTests.swift; sourceTree = "<group>"; };
 		55A317271C5C1DC5F19874F0 /* ScreenLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLayoutManager.swift; sourceTree = "<group>"; };
+		57DA31C849B5B43DB4C014F8 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		5C69C1C252C156ABE2251BEB /* EditorControlPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorControlPanel.swift; sourceTree = "<group>"; };
 		63C23635346EE9CCFED43763 /* AccessibilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityManager.swift; sourceTree = "<group>"; };
 		677DF89455CA0804A2E9D434 /* DragState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragState.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 			children = (
 				7B490D0AFA678833A52FEA30 /* ContentView.swift */,
 				15E5881CF92898C9CD01738F /* Info.plist */,
+				57DA31C849B5B43DB4C014F8 /* Logger.swift */,
 				F568CA4DBC8D4D84575F1527 /* Shikiri.entitlements */,
 				9D6CC1C816226A6BB7F94607 /* ShikiriApp.swift */,
 				C94CBA11350A374D7AC9A459 /* Accessibility */,
@@ -416,6 +419,7 @@
 				A9E0D10E4C83F47C6B8D2B75 /* LaunchAtLoginManager.swift in Sources */,
 				D09176163BADDE68BCA860F0 /* LayoutEditorView.swift in Sources */,
 				5830AB4C310A6028672DBBE3 /* LayoutEditorWindowController.swift in Sources */,
+				DF5564808DE01CB33939CE49 /* Logger.swift in Sources */,
 				25D44F7F9C7C013203BB942A /* ModifierPresetBinding.swift in Sources */,
 				9FD3BC7B72529ABA0B190B38 /* OverlayController.swift in Sources */,
 				6B581AFC2AA0B4E82FA587B6 /* OverlayWindow.swift in Sources */,

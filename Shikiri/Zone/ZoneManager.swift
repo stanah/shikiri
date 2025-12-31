@@ -1,22 +1,8 @@
 import AppKit
 
-/// ログをファイルに書き込む
+/// ログを出力する
 private func zoneLog(_ message: String) {
-    let logPath = "/tmp/shikiri_app.log"
-    let timestamp = ISO8601DateFormatter().string(from: Date())
-    let logMessage = "[\(timestamp)] [ZoneManager] \(message)\n"
-    print("[ZoneManager] \(message)")
-    if let data = logMessage.data(using: .utf8) {
-        if FileManager.default.fileExists(atPath: logPath) {
-            if let handle = FileHandle(forWritingAtPath: logPath) {
-                handle.seekToEndOfFile()
-                handle.write(data)
-                handle.closeFile()
-            }
-        } else {
-            try? data.write(to: URL(fileURLWithPath: logPath))
-        }
-    }
+    ShikiriLogger.log(message, category: "ZoneManager")
 }
 
 /// ゾーンの管理を行うクラス

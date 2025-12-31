@@ -1,23 +1,9 @@
 import AppKit
 import Foundation
 
-/// ログをファイルに書き込む
+/// ログを出力する
 private func layoutLog(_ message: String) {
-    let logPath = "/tmp/shikiri_app.log"
-    let timestamp = ISO8601DateFormatter().string(from: Date())
-    let logMessage = "[\(timestamp)] [ScreenLayoutManager] \(message)\n"
-    print("[ScreenLayoutManager] \(message)")
-    if let data = logMessage.data(using: .utf8) {
-        if FileManager.default.fileExists(atPath: logPath) {
-            if let handle = FileHandle(forWritingAtPath: logPath) {
-                handle.seekToEndOfFile()
-                handle.write(data)
-                handle.closeFile()
-            }
-        } else {
-            try? data.write(to: URL(fileURLWithPath: logPath))
-        }
-    }
+    ShikiriLogger.log(message, category: "ScreenLayoutManager")
 }
 
 /// 画面ごとのレイアウト設定を管理するマネージャー
